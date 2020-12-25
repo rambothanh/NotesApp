@@ -195,18 +195,34 @@ namespace NotesApp
                 var contentString = rdr.GetString(3);
                 var contentLen = contentString.Length;
                 var soDongcontent = contentLen/30;                 
-                for (int i = 0; i <= Math.Min(soDongTitle,soDongcontent); i++){
+                for (int i = 0; i <= Math.Max(soDongTitle,soDongcontent); i++){
                     if (i==0){
                         //Hiện dòng đầu tiên
                         //Console.WriteLine(soDong);
-                        Console.Write($"{titleString.Substring(0,Math.Min(titleLen,20)),-20}");
+                        Console.Write($"{titleString.Substring(0,Math.Min(titleLen,20)),-20} ");
                         Console.WriteLine($"{contentString.Substring(0,Math.Min(contentLen,30)),-30}");
                     }else{
-                        //Từ dòng thứ 2 trở đi cách đầu dòng 24 ký tự
-                        Console.Write("                        ");
-                        //Hiển thị title 
-                        //Substring(vịtrí, độdài)
-                        Console.WriteLine($"{titleString.Substring(20*i,Math.Min(titleLen - 20*i,20)),-20}");
+                        if (i <=Math.Min(soDongTitle, soDongcontent))
+                        {
+                            //Từ dòng thứ 2 trở đi cách đầu dòng 24 ký tự
+                            Console.Write("                        ");
+                            //Hiển thị title 
+                            //Substring(vịtrí, độ dài)
+                            Console.Write($"{titleString.Substring(20 * i, Math.Min(titleLen - 20 * i, 20)),-20} ");
+                            Console.WriteLine($"{contentString.Substring(30 * i, Math.Min(contentLen - 30 * i, 30)),-30}");
+
+                        }else if (soDongTitle >= soDongcontent)
+                        {
+                            //Từ dòng thứ 2 trở đi cách đầu dòng 24 ký tự
+                            Console.Write("                        ");
+                            Console.WriteLine($"{titleString.Substring(20 * i, Math.Min(titleLen - 20 * i, 20)),-20} ");
+                        }else if (soDongTitle < soDongcontent)
+                        {
+                            //thêm 24 + 21 =45ký tự
+                            Console.Write("                                             ");
+                            Console.WriteLine($"{contentString.Substring(30 * i, Math.Min(contentLen - 30 * i, 30)),-30}");
+                        }
+
                     }
                 }
                 //Console.WriteLine($"{titleString.Substring(1,20),-20}");
