@@ -61,9 +61,36 @@ namespace NotesApp
                 }
             }
         //edit note
-        static void EditNote(string useruserName)
+        static void EditNote(string userName)
         {
-
+            ShowAllNotes(userName);
+            Console.WriteLine("Press id number to edit note...");
+            Console.Write("id:");
+            var id = Console.ReadLine();
+            Console.WriteLine("You are editing a note, are you sure? [y/n]");            
+            if (Console.ReadKey(true).Key == ConsoleKey.Y)
+            {
+                string cs = @"URI=file:" + userName + ".db";
+                using var con = new SQLiteConnection(cs);
+                con.Open();
+                using var cmd = new SQLiteCommand(con);
+                cmd.CommandText = @"CREATE TABLE IF NOT EXISTS  Notes(id INTEGER PRIMARY KEY,
+                        date TEXT,title TEXT, content TEXT)";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "UPDATE Notes SET title = @title, content = @content WHERE id = @id";
+                Console.WriteLine("Editing a note id=["+id+"]...");
+                cmd.Parameters.AddWithValue("@id", id);
+                Console.Write("Title:");
+                string newTitle = Console.ReadLine();
+                cmd.Parameters.AddWithValue("@title", newTitle);
+                Console.Write("Content:");
+                string newContent = Console.ReadLine();
+                cmd.Parameters.AddWithValue("@content", newContent);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Note id=["+id+"] has just been edited!");
+                con.Close();   
+            }else{ShowGiaoDien(userName);}            
         }
 
         //Delete Note
@@ -75,7 +102,7 @@ namespace NotesApp
             var id = Console.ReadLine();
             Console.WriteLine("You are deleting a note, are you sure? [y/n]");
             if (Console.ReadKey(true).Key == ConsoleKey.Y)
-                {
+            {
                     //bam y Dong y delete
                     string cs = @"URI=file:" + userName + ".db";
                     using var con = new SQLiteConnection(cs);
@@ -91,11 +118,11 @@ namespace NotesApp
                     cmd.ExecuteNonQuery();
                     Console.WriteLine("Note has just been deleted!");
                     con.Close();     
-                }
-                else
-                {
+            }
+            else
+            {
                   ShowGiaoDien(userName);
-                }
+            }
        
         }
 
