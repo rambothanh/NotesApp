@@ -20,20 +20,32 @@ namespace NotesApp
             Console.WriteLine("[3]. Edit note");
             Console.WriteLine("[4]. Delete note");
             Console.Write("Your choice:");
-            string choice = Console.ReadLine();
-            ShowAllNotes(userName);
-            Console.ReadKey();
-            //Hỏi người dùng add thêm Note
-            static void AddANewNote(){
-
+            var choice = Console.ReadLine();
+            if (choice == "1")
+            {
+                ShowAllNotes(userName);
+                Console.ReadKey();
             }
+            else if (choice == "2")
+            {
+                AddANewNote(userName);
+                Console.ReadKey();
+            }
+
+
+
+
+        }
+
+        //Hỏi người dùng add thêm Note
+        static void AddANewNote(string userName)
+        {
             string cs = @"URI=file:" + userName + ".db";
             using var con = new SQLiteConnection(cs);
             con.Open();
             using var cmd = new SQLiteCommand(con);
             ////cmd.CommandText = "DROP TABLE IF EXISTS Notes";
             ////cmd.ExecuteNonQuery();
-
             cmd.CommandText = @"CREATE TABLE IF NOT EXISTS  Notes(id INTEGER PRIMARY KEY,
                     date TEXT,title TEXT, content TEXT)";
             cmd.ExecuteNonQuery();
@@ -51,6 +63,7 @@ namespace NotesApp
             Console.WriteLine("Note has just been inserted!");
             con.Close();
         }
+
 
         //Show all notes with database 
         static void ShowAllNotes(string userName)
@@ -86,7 +99,7 @@ namespace NotesApp
             if (File.Exists(userName + ".db"))
             {
                 //Neu co thi chao mung
-                Console.WriteLine("Wellcome back! [" + userName+"]");
+                Console.WriteLine("Wellcome back! [" + userName + "]");
                 return userName;
             }
             else
