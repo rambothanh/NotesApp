@@ -15,27 +15,38 @@ namespace NotesApp
             //có muốn tạo mới, không tạo mới thì đánh lại tên người dùng khác
             string userName = GetUserName();
 
-            Console.WriteLine("[1]. Show all notes");
-            Console.WriteLine("[2]. Add a new note");
-            Console.WriteLine("[3]. Edit note");
-            Console.WriteLine("[4]. Delete note");
-            Console.Write("Your choice:");
-            var choice = Console.ReadLine();
-            if (choice == "1")
-            {
-                ShowAllNotes(userName);
-                Console.ReadKey();
-            }
-            else if (choice == "2")
-            {
-                AddANewNote(userName);
-                Console.ReadKey();
-            }
-
-
-
+            ShowGiaoDien(userName);
 
         }
+
+        //Hiện giao diện lựa chọn tống của chương trình
+            static void ShowGiaoDien(string userName)
+            {
+                Console.WriteLine("Please select the functions according to the number:");
+                Console.WriteLine("     [1]. Show all notes");
+                Console.WriteLine("     [2]. Add a new note");
+                Console.WriteLine("     [3]. Edit note");
+                Console.WriteLine("     [4]. Delete note");
+                Console.WriteLine("     [e]. Exit");
+                    Console.Write("Your choice:");
+                var choice = Console.ReadLine();
+                if (choice == "1")
+                {
+                    ShowAllNotes(userName);
+                    Console.ReadKey();
+                    ShowGiaoDien(userName);
+                }
+                else if (choice == "2")
+                {
+                    AddANewNote(userName);
+                    Console.ReadKey();
+                    ShowGiaoDien(userName);
+                }else if (choice == "e")
+                {
+                    Environment.Exit(0);
+                }
+            }
+
 
         //Hỏi người dùng add thêm Note
         static void AddANewNote(string userName)
@@ -54,8 +65,12 @@ namespace NotesApp
             //cách khác:
             cmd.CommandText = "INSERT INTO Notes(date, title,content) VALUES(datetime('now', 'localtime'), @title, @content)";
             //cmd.Parameters.AddWithValue("@date",CURRENT_TIMESTAMP);
+            //
+            Console.WriteLine("Adding new note...");
+            Console.Write("Title:");
             string title = Console.ReadLine();
             cmd.Parameters.AddWithValue("@title", title);
+            Console.Write("Content:");
             string content = Console.ReadLine();
             cmd.Parameters.AddWithValue("@content", content);
             cmd.Prepare();
@@ -72,7 +87,11 @@ namespace NotesApp
             string cs = @"URI=file:" + userName + ".db";
             using var con = new SQLiteConnection(cs);
             con.Open();
-
+            //Kiểm tra table nếu chưa có thì tạo mới
+            using var cmd = new SQLiteCommand(con);
+            cmd.CommandText = @"CREATE TABLE IF NOT EXISTS  Notes(id INTEGER PRIMARY KEY,
+                    date TEXT,title TEXT, content TEXT)";
+            cmd.ExecuteNonQuery();
             //Read database
             //string stmRead = "SELECT * FROM Notes LIMIT 5";
             string stmRead = "SELECT * FROM Notes";
