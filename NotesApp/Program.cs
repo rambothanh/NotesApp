@@ -22,6 +22,8 @@ namespace NotesApp
         //Hiện giao diện lựa chọn tống của chương trình
             static void ShowGiaoDien(string userName)
             {
+                Console.Clear();
+                Console.WriteLine("Hi! ["+userName+"]");
                 Console.WriteLine("Please select the functions according to the number:");
                 Console.WriteLine("     [1]. Show all notes");
                 Console.WriteLine("     [2]. Add a new note");
@@ -36,8 +38,7 @@ namespace NotesApp
                     Console.WriteLine("Press enter to continue...");
                     Console.ReadKey();
                     ShowGiaoDien(userName);
-                }
-                else if (choice == "2")
+                }else if (choice == "2")
                 {
                     AddANewNote(userName);
                     Console.WriteLine("Press enter to continue...");
@@ -162,6 +163,8 @@ namespace NotesApp
         //Show all notes with database 
         static void ShowAllNotes(string userName)
         {
+            //Xóa màn hình cho đỡ rối
+            Console.Clear();
             // Tao database hoặc kết nôi database đã có theo ten nguoi dung
             string cs = @"URI=file:" + userName + ".db";
             using var con = new SQLiteConnection(cs);
@@ -179,10 +182,33 @@ namespace NotesApp
 
             Console.WriteLine("        ALL NOTE(s) OF ["+userName+"]");
             //Lấy tiêu đề bảng            
-            Console.WriteLine($"{rdr.GetName(0),-3} {rdr.GetName(1),-20} {rdr.GetName(2),-20} {rdr.GetName(3),-10}");
+            Console.WriteLine($"{rdr.GetName(0),-3} {rdr.GetName(1),-19} {rdr.GetName(2),-20} {rdr.GetName(3),-30}");
             while (rdr.Read())
             {
-                Console.WriteLine($"{rdr.GetInt32(0),-3} {rdr.GetString(1),-20} {rdr.GetString(2),-20} {rdr.GetString(3),-10}");
+                //số -3, -20  -30 là độ rộng, dấu trừ là canh trái
+                //Hiện id và date trước:
+                Console.Write($"{rdr.GetInt32(0),-3} {rdr.GetString(1),-19} ");
+                //Hiện title và content thông minh nhiều dòng thông minh.
+                var titleString = rdr.GetString(2);
+                var titleLen = titleString.Length;
+                var soDong = titleLen/20; 
+                for (int i = 0; i <= soDong; i++){
+                    if (i==0){
+                        //Hiện dòng đầu tiên
+                        //Console.WriteLine(soDong);
+                        Console.WriteLine($"{titleString.Substring(0,Math.Min(titleLen,20)),-20}");
+                    }else{
+                        //Từ dòng thứ 2 trở đi cách đầu dòng 24 ký tự
+                        Console.Write("                        ");
+                        //Substring(vịtrí, độdài)
+                        Console.WriteLine($"{titleString.Substring(20*i,Math.Min(titleLen - 20*i,20)),-20}");
+                        //Console.WriteLine($"{titleString.Substring(i*20,Math.Min(titleLen,i*20+20)),-20}");
+                    }
+
+                }
+                //Console.WriteLine($"{titleString.Substring(1,20),-20}");
+                //Hiện title và Content một dòng đơn giản
+                //Console.WriteLine($"{rdr.GetString(2),-20} {rdr.GetString(3),-30} ");
             }
             con.Close();
         }
