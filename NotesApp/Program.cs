@@ -11,7 +11,8 @@ namespace NotesApp
             //show name app
             ShowNameApp();
 
-            //Lay ten nguoi dung và kiểm tra tồn tại
+            //Lay ten nguoi dung và kiểm tra tồn tại, nếu không tồn tại hỏi người dùng 
+            //có muốn tạo mới, không tạo mới thì đánh lại tên người dùng khác
             string userName = GetUserName();
 
             Console.WriteLine("[1]. Show all notes");
@@ -22,7 +23,10 @@ namespace NotesApp
             string choice = Console.ReadLine();
             ShowAllNotes(userName);
             Console.ReadKey();
+            //Hỏi người dùng add thêm Note
+            static void AddANewNote(){
 
+            }
             string cs = @"URI=file:" + userName + ".db";
             using var con = new SQLiteConnection(cs);
             con.Open();
