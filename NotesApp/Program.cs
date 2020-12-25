@@ -33,19 +33,71 @@ namespace NotesApp
                 if (choice == "1")
                 {
                     ShowAllNotes(userName);
+                    Console.WriteLine("Press enter to continue...");
                     Console.ReadKey();
                     ShowGiaoDien(userName);
                 }
                 else if (choice == "2")
                 {
                     AddANewNote(userName);
+                    Console.WriteLine("Press enter to continue...");
                     Console.ReadKey();
                     ShowGiaoDien(userName);
+                }else if(choice == "3")
+                {
+                    EditNote(userName);
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadKey();
+                    ShowGiaoDien(userName);                    
+                }else if(choice == "4")
+                {
+                    DeleteNote(userName);
+                    Console.WriteLine("Press enter to continue...");
+                    Console.ReadKey();
+                    ShowGiaoDien(userName);                    
                 }else if (choice == "e")
                 {
                     Environment.Exit(0);
                 }
             }
+        //edit note
+        static void EditNote(string useruserName)
+        {
+
+        }
+
+        //Delete Note
+        static void DeleteNote(string userName)
+        {
+            ShowAllNotes(userName);
+            Console.WriteLine("Press id number to delete...");
+            Console.Write("id:");
+            var id = Console.ReadLine();
+            Console.WriteLine("You are deleting a note, are you sure? [y/n]");
+            if (Console.ReadKey(true).Key == ConsoleKey.Y)
+                {
+                    //bam y Dong y delete
+                    string cs = @"URI=file:" + userName + ".db";
+                    using var con = new SQLiteConnection(cs);
+                    con.Open();
+                    using var cmd = new SQLiteCommand(con);
+                    cmd.CommandText = @"CREATE TABLE IF NOT EXISTS  Notes(id INTEGER PRIMARY KEY,
+                            date TEXT,title TEXT, content TEXT)";
+                    cmd.ExecuteNonQuery();
+                    //cmd.CommandText = "INSERT INTO Notes(date, title,content) VALUES(datetime('now', 'localtime'), @title, @content)";
+                    cmd.CommandText = "DELETE FROM Notes WHERE ID = @id";
+                    cmd.Parameters.AddWithValue("@id",id);
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    Console.WriteLine("Note has just been deleted!");
+                    con.Close();     
+                }
+                else
+                {
+                  ShowGiaoDien(userName);
+                }
+       
+        }
 
 
         //Hỏi người dùng add thêm Note
@@ -98,6 +150,7 @@ namespace NotesApp
             using var cmdRead = new SQLiteCommand(stmRead, con);
             using SQLiteDataReader rdr = cmdRead.ExecuteReader();
 
+            Console.WriteLine("        ALL NOTE(s) OF ["+userName+"]");
             //Lấy tiêu đề bảng            
             Console.WriteLine($"{rdr.GetName(0),-3} {rdr.GetName(1),-20} {rdr.GetName(2),-20} {rdr.GetName(3),-10}");
             while (rdr.Read())
