@@ -191,20 +191,23 @@ namespace NotesApp
                 //Hiện title và content thông minh nhiều dòng thông minh.
                 var titleString = rdr.GetString(2);
                 var titleLen = titleString.Length;
-                var soDong = titleLen/20; 
-                for (int i = 0; i <= soDong; i++){
+                var soDongTitle = titleLen/20; 
+                var contentString = rdr.GetString(3);
+                var contentLen = contentString.Length;
+                var soDongcontent = contentLen/30;                 
+                for (int i = 0; i <= Math.Min(soDongTitle,soDongcontent); i++){
                     if (i==0){
                         //Hiện dòng đầu tiên
                         //Console.WriteLine(soDong);
-                        Console.WriteLine($"{titleString.Substring(0,Math.Min(titleLen,20)),-20}");
+                        Console.Write($"{titleString.Substring(0,Math.Min(titleLen,20)),-20}");
+                        Console.WriteLine($"{contentString.Substring(0,Math.Min(contentLen,30)),-30}");
                     }else{
                         //Từ dòng thứ 2 trở đi cách đầu dòng 24 ký tự
                         Console.Write("                        ");
+                        //Hiển thị title 
                         //Substring(vịtrí, độdài)
                         Console.WriteLine($"{titleString.Substring(20*i,Math.Min(titleLen - 20*i,20)),-20}");
-                        //Console.WriteLine($"{titleString.Substring(i*20,Math.Min(titleLen,i*20+20)),-20}");
                     }
-
                 }
                 //Console.WriteLine($"{titleString.Substring(1,20),-20}");
                 //Hiện title và Content một dòng đơn giản
