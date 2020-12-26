@@ -299,8 +299,8 @@ namespace NotesApp
                 else
                 {
                     //bam n hoac cac phim khac thì chương trình sẽ hỏi lại Username
-                    GetUserName();
-                    return "default";
+                    
+                    return GetUserName();
                 }
 
             }
