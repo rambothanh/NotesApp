@@ -1,6 +1,6 @@
 # NotesApp
 ## Feature
-Create, Read, Update, Delete Note or Diary simple but strong. 
+Create, Read, Update, Delete Note or Diary simple but strong. When the user enters the name, the program will find the corresponding database, if not, it will ask the user to create a new database, if any, it will enter the CRUD interface.
 ## Technology
 #### Console .net core app
 #### SQLite Database
