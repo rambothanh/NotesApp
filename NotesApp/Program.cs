@@ -9,27 +9,62 @@ namespace NotesApp
     {
         static void Main(string[] args)
         {
-            //show name app
             ShowNameApp();
+            GetAllDb();
+            
+            //show name app
+            // ShowNameApp();
 
-            //Lay ten nguoi dung và kiểm tra tồn tại, nếu không tồn tại hỏi người dùng 
-            //có muốn tạo mới, không tạo mới thì đánh lại tên người dùng khác
+            // //Lay ten nguoi dung và kiểm tra tồn tại, nếu không tồn tại hỏi người dùng 
+            // //có muốn tạo mới, không tạo mới thì đánh lại tên người dùng khác
+            
+
+            
+
+        }
+        // GetAll Database in current Directory
+        //
+        static void GetAllDb(){
+            Console.Clear();
+            Console.WriteLine("All NoteBook(s) (Name or Database)");
+            Console.WriteLine("-----------------------------------------"); 
+            ProcessDirectory(Directory.GetCurrentDirectory());
             string userName = GetUserName();
-
             ShowGiaoDien(userName);
 
+            static void ProcessDirectory(string targetDirectory)
+            {
+                // Process the list of files found in the directory.
+                string [] fileEntries = Directory.GetFiles(targetDirectory,"*.db");
+                foreach(string fileName in fileEntries)
+                {
+                    
+                    ProcessFile(fileName);
+                }
+                // Recurse into subdirectories of this directory.
+                // Không cần tìm trong thư mục con nên Comment phần này
+                // string [] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+                // foreach(string subdirectory in subdirectoryEntries)
+                //     ProcessDirectory(subdirectory);
+            }
+            // Insert logic for processing found files here.
+            static void ProcessFile(string path)
+            {
+                Console.WriteLine(Path.GetFileName(path));	
+            }
         }
 
         //Hiện giao diện lựa chọn tống của chương trình
-            static void ShowGiaoDien(string userName)
+        static void ShowGiaoDien(string userName)
             {
                 Console.Clear();
-                Console.WriteLine("Hi! ["+userName+"]");
+                Console.WriteLine("Current Notebook: ["+userName+"]");
                 Console.WriteLine("Please select the functions according to the number:");
-                Console.WriteLine("     [1]. Show all notes");
+                Console.WriteLine("     [1]. Show all Note(s)");
                 Console.WriteLine("     [2]. Add a new note");
                 Console.WriteLine("     [3]. Edit note");
                 Console.WriteLine("     [4]. Delete note");
+                Console.WriteLine("     [5]. Show all Notebook(s)");
                 Console.WriteLine("     [e]. Exit");
                     Console.Write("Your choice:");
                 var choice = Console.ReadLine();
@@ -57,6 +92,9 @@ namespace NotesApp
                     Console.WriteLine("Press enter to continue...");
                     Console.ReadKey();
                     ShowGiaoDien(userName);                    
+                }else if(choice == "5")
+                {
+                    GetAllDb();                    
                 }else if (choice == "e")
                 {
                     Environment.Exit(0);
@@ -274,10 +312,12 @@ namespace NotesApp
         }
 
         //get User name and check database
-        static string GetUserName()
+        //UserName chính là NoteBook(s)
+    static string GetUserName()
         {
-            //Get user name        
-            Console.WriteLine("Enter your Name...");
+            //Get user name, notebook, database       
+            Console.WriteLine("-----------------------------------------"); 
+            Console.WriteLine("Enter your NoteBook (Name or Database)...");
             string userName = Console.ReadLine();
             userName = userName.Replace(" ", "");
             //Kiểm tra database đã có chưa
@@ -307,7 +347,7 @@ namespace NotesApp
 
         }
 
-        static void ShowNameApp()
+    static void ShowNameApp()
         {
             string nameApp = @"
  ██████╗ ██╗  ██╗██╗     ██████╗██╗  ██╗██╗   ██╗     █████╗ ██████╗ ██████╗ 
@@ -319,6 +359,9 @@ namespace NotesApp
                                                                              
 ";
             Console.WriteLine(nameApp);
+            Console.WriteLine("Press enter to continue...");
+            Console.ReadKey();
+
         }
 
 
@@ -478,7 +521,7 @@ namespace NotesApp
             }
         }
         //thêm khoản trẳng cho vừa độ rộng
-        static string AddSpace(string str,int doRong)
+    static string AddSpace(string str,int doRong)
         {
             var strLen = str.Length;
             while ((doRong- strLen) >0)
