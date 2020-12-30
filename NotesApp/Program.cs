@@ -59,6 +59,7 @@ namespace NotesApp
             {
                 Console.Clear();
                 Console.WriteLine("Current Notebook: ["+userName+"]");
+                Console.WriteLine("-----------------------------------------");
                 Console.WriteLine("Please select the functions according to the number:");
                 Console.WriteLine("     [1]. Show all Note(s)");
                 Console.WriteLine("     [2]. Add a new note");
@@ -66,6 +67,7 @@ namespace NotesApp
                 Console.WriteLine("     [4]. Delete note");
                 Console.WriteLine("     [5]. Show all Notebook(s)");
                 Console.WriteLine("     [e]. Exit");
+                Console.WriteLine("-----------------------------------------");
                     Console.Write("Your choice:");
                 var choice = Console.ReadLine();
                 if (choice == "1")
@@ -330,7 +332,7 @@ namespace NotesApp
             else
             {
                 //Neu chua co, xac nhan lai voi ngoi dung xem co muon tao moi
-                Console.WriteLine("User:[" + userName + "] is not Exist, create new user? [y/n]");
+                Console.WriteLine("User:[" + userName + "] is not Exist, create new Notebook? [y/n]");
                 if (Console.ReadKey(true).Key == ConsoleKey.Y)
                 {
                     //bam y tao moi database theo Username
